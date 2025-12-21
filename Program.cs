@@ -25,7 +25,7 @@ namespace LinearRegression
         {
             // Create ML context
             var mlContext = new MLContext(seed: 1);
-
+            // Sample dataset following the regression model y = 2x + 3
             var trainingData = new List<ModelInput>
     {
     new() { X = 1,  Y = 5.0f },
@@ -54,26 +54,27 @@ namespace LinearRegression
                     labelColumnName: nameof(ModelInput.Y),
                     featureColumnName: "Features"));
 
-            // Train model
-            var model = pipeline.Fit(splitData.TrainSet);
 
-            // Evaluate model
-            var predictions = model.Transform(splitData.TestSet);
-            var metrics = mlContext.Regression.Evaluate(
-                predictions,
+            //Cross-validation
+            var cvResults = mlContext.Regression.CrossValidate(
+                data: dataView,
+                estimator: pipeline,
+                numberOfFolds: 3,
                 labelColumnName: nameof(ModelInput.Y));
 
-            Console.WriteLine("=== Model Metrics ===");
-            Console.WriteLine($"R² Score: {metrics.RSquared:0.###}");
-            Console.WriteLine($"RMSE: {metrics.RootMeanSquaredError:0.###}");
+            Console.WriteLine("=== Cross-Validated Metrics ===");
+            Console.WriteLine($"Avg R² Score: {cvResults.Average(r => r.Metrics.RSquared):0.###}");
+            Console.WriteLine($"Avg RMSE: {cvResults.Average(r => r.Metrics.RootMeanSquaredError):0.###}");
 
-            // Make prediction
+            // Train final model on all data
+            var model = pipeline.Fit(dataView);
+
+            // Prediction
             var engine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(model);
-            var input = new ModelInput { X = 10 };
-            var result = engine.Predict(input);
+            var prediction = engine.Predict(new ModelInput { X = 10 });
 
             Console.WriteLine();
-            Console.WriteLine($"Prediction for X = 10 → Y ≈ {result.Prediction:0.###}");
+            Console.WriteLine($"Prediction for X = 10 → Y ≈ {prediction.Prediction:0.###}");
         }
     }
 }
