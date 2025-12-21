@@ -39,3 +39,4 @@ C:\Users\parva\LinearRegression\obj\Debug\net10.0\refint\LinearRegression.dll
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.pdb
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.genruntimeconfig.cache
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\ref\LinearRegression.dll
+C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.sourcelink.json
