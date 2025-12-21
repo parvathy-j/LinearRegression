@@ -33,10 +33,10 @@ C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.GeneratedMSBu
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.AssemblyInfoInputs.cache
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.AssemblyInfo.cs
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.csproj.CoreCompileInputs.cache
+C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.sourcelink.json
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRe.BCBF840A.Up2Date
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.dll
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\refint\LinearRegression.dll
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.pdb
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.genruntimeconfig.cache
 C:\Users\parva\LinearRegression\obj\Debug\net10.0\ref\LinearRegression.dll
-C:\Users\parva\LinearRegression\obj\Debug\net10.0\LinearRegression.sourcelink.json
