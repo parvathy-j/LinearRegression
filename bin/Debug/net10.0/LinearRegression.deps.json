@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "LinearRegression/1.0.0": {
         "dependencies": {
+          "LinearRegression.Core": "1.0.0",
           "Microsoft.ML": "5.0.0"
         },
         "runtime": {
@@ -167,6 +168,17 @@
             "fileVersion": "9.0.425.16305"
           }
         }
+      },
+      "LinearRegression.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.ML": "5.0.0"
+        },
+        "runtime": {
+          "LinearRegression.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -224,6 +236,11 @@
       "sha512": "sha512-ynVvqELpMWGQJ1Y90rlAmuTiSQIkXD0W5AMj7pVpEjECmrcIJLexIBblgccerHFijayfcsl1KCbkk+Sg5cS9vQ==",
       "path": "system.numerics.tensors/9.0.4",
       "hashPath": "system.numerics.tensors.9.0.4.nupkg.sha512"
+    },
+    "LinearRegression.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

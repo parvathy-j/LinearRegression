@@ -237,6 +237,19 @@
         "build": {
           "buildTransitive/net8.0/_._": {}
         }
+      },
+      "LinearRegression.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Microsoft.ML": "5.0.0"
+        },
+        "compile": {
+          "bin/placeholder/LinearRegression.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LinearRegression.Core.dll": {}
+        }
       }
     }
   },
@@ -443,10 +456,16 @@
         "system.numerics.tensors.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "LinearRegression.Core/1.0.0": {
+      "type": "project",
+      "path": "src/LinearRegression.Core/LinearRegression.Core.csproj",
+      "msbuildProject": "src/LinearRegression.Core/LinearRegression.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "LinearRegression.Core >= 1.0.0",
       "Microsoft.ML >= 5.0.0"
     ]
   },
@@ -474,7 +493,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\parva\\LinearRegression\\src\\LinearRegression.Core\\LinearRegression.Core.csproj": {
+              "projectPath": "C:\\Users\\parva\\LinearRegression\\src\\LinearRegression.Core\\LinearRegression.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
