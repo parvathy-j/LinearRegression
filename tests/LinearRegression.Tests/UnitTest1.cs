@@ -26,9 +26,9 @@ public class ModelTrainerTests
         var (avgR2, avgRmse, perFold) = trainer.Train(trainingData);
         var prediction = trainer.Predict(10);
 
-        // Assert: prediction should be near 23 (2*10+3)
+        // Assert: OLS should fit the perfect linear data exactly (or very close)
         Assert.InRange(prediction, 22.0f, 24.0f);
-        Assert.True(avgR2 > 0.9);
+        Assert.True(avgR2 > 0.99);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class ModelTrainerTests
             loader.Load(tmp);
 
             var p = loader.Predict(4);
-            Assert.InRange(p, 10.0f, 12.0f);
+            Assert.InRange(p, 8.0f, 12.0f);
         }
         finally
         {

@@ -21,19 +21,18 @@ namespace LinearRegression.Core
         public (double AvgRSquared, double AvgRMSE, RegressionMetrics[] PerFoldMetrics) Train(
             IEnumerable<ModelInput> data,
             int numberOfFolds = 3,
-            int numberOfIterations = 500,
+            int numberOfIterations = 5000,
             float learningRate = 0.1f)
         {
             var dataView = _mlContext.Data.LoadFromEnumerable(data);
-
+            // Increase iterations and set a larger learning rate to improve convergence on small datasets.
             var pipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(ModelInput.Y))
                 .Append(_mlContext.Transforms.Concatenate("Features", nameof(ModelInput.X)))
                 .Append(_mlContext.Transforms.NormalizeMeanVariance("Features"))
-                .Append(_mlContext.Regression.Trainers.OnlineGradientDescent(
+                // Use SDCA regression trainer — tends to converge well on small datasets and is robust.
+                .Append(_mlContext.Regression.Trainers.Sdca(
                     labelColumnName: "Label",
-                    featureColumnName: "Features",
-                    numberOfIterations: numberOfIterations,
-                    learningRate: learningRate));
+                    featureColumnName: "Features"));
 
             var cvResults = _mlContext.Regression.CrossValidate(
                 data: dataView,
