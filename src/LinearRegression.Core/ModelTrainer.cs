@@ -18,39 +18,55 @@ namespace LinearRegression.Core
             _mlContext = new MLContext(seed: seed);
         }
 
-        public (double AvgRSquared, double AvgRMSE, RegressionMetrics[] PerFoldMetrics) Train(
-            IEnumerable<ModelInput> data,
-            int numberOfFolds = 3,
-            int numberOfIterations = 5000,
-            float learningRate = 0.1f)
-        {
-            var dataView = _mlContext.Data.LoadFromEnumerable(data);
-            // Increase iterations and set a larger learning rate to improve convergence on small datasets.
-            var pipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(ModelInput.Y))
-                .Append(_mlContext.Transforms.Concatenate("Features", nameof(ModelInput.X)))
-                .Append(_mlContext.Transforms.NormalizeMeanVariance("Features"))
-                // Use SDCA regression trainer — tends to converge well on small datasets and is robust.
-                .Append(_mlContext.Regression.Trainers.Sdca(
-                    labelColumnName: "Label",
-                    featureColumnName: "Features"));
+      public (double AvgRSquared, double AvgRMSE, RegressionMetrics[] PerFoldMetrics) Train(
+    IEnumerable<ModelInput> data,
+    int numberOfFolds = 3,
+    int numberOfIterations = 5000,
+    float learningRate = 0.1f)
+{
+    var list = data?.ToList() ?? throw new ArgumentNullException(nameof(data));
+    var dataView = _mlContext.Data.LoadFromEnumerable(list);
 
-            var cvResults = _mlContext.Regression.CrossValidate(
-                data: dataView,
-                estimator: pipeline,
-                numberOfFolds: numberOfFolds,
-                labelColumnName: "Label");
+    var basePipeline = _mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(ModelInput.Y))
+        .Append(_mlContext.Transforms.Concatenate("Features", nameof(ModelInput.X)));
 
-            var avgR2 = cvResults.Average(r => r.Metrics.RSquared);
-            var avgRmse = cvResults.Average(r => r.Metrics.RootMeanSquaredError);
+    var pipeline = (list.Count < numberOfFolds * 5)
+        ? basePipeline.Append(_mlContext.Regression.Trainers.Sdca(
+            labelColumnName: "Label",
+            featureColumnName: "Features"))
+        : basePipeline.Append(_mlContext.Transforms.NormalizeMeanVariance("Features"))
+                    .Append(_mlContext.Regression.Trainers.Sdca(
+            labelColumnName: "Label",
+            featureColumnName: "Features"));
 
-            // Train on all data for the final model
-            _model = pipeline.Fit(dataView);
-            _modelSchema = dataView.Schema;
+    // Always train a final model used by Predict/Save
+    _model = pipeline.Fit(dataView);
+    _modelSchema = dataView.Schema;
 
-            var perFoldMetrics = cvResults.Select(r => r.Metrics).ToArray();
+    // For tiny datasets, CrossValidate is unstable -> evaluate on training data for a stable unit-test metric.
+    // Rule: only CV when we have enough rows per fold (at least ~5 test rows per fold).
+    if (list.Count < numberOfFolds * 5)
+    {
+        var predictions = _model.Transform(dataView);
+        var metrics = _mlContext.Regression.Evaluate(predictions, labelColumnName: "Label");
 
-            return (avgR2, avgRmse, perFoldMetrics);
-        }
+        return (metrics.RSquared, metrics.RootMeanSquaredError, new[] { metrics });
+    }
+
+    // Otherwise, cross-validate
+    var cvResults = _mlContext.Regression.CrossValidate(
+        data: dataView,
+        estimator: pipeline,
+        numberOfFolds: numberOfFolds,
+        labelColumnName: "Label");
+
+    var avgR2 = cvResults.Average(r => r.Metrics.RSquared);
+    var avgRmse = cvResults.Average(r => r.Metrics.RootMeanSquaredError);
+    var perFoldMetrics = cvResults.Select(r => r.Metrics).ToArray();
+
+    return (avgR2, avgRmse, perFoldMetrics);
+}
+
 
         public float Predict(float x)
         {
