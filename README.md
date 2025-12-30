@@ -16,7 +16,7 @@ In this project, I:
 
 - Built a regression model using **ML.NET**
 - Evaluated it using **k-fold cross-validation**
-- Improved stability using **feature normalization** and **gradient descent**
+- Improved stability using feature normalization and ML.NET’s optimisation-based trainers.
 - Implemented the same model **from scratch** using the closed-form least squares solution
 - Compared both approaches to reinforce understanding
 
@@ -75,8 +75,7 @@ This clean dataset makes it easy to verify that the model is learning correctly 
 ### ML.NET Implementation
 - Uses a full ML pipeline
 - Feature normalization
-- Online Gradient Descent trainer
-- 3-fold cross-validation for reliable metrics
+- “Optimisation-based regression trainer provided by ML.NET.”- 3-fold cross-validation for reliable metrics
 - Produces R² and RMSE for evaluation
 
 ### From-Scratch Implementation
@@ -88,7 +87,23 @@ This clean dataset makes it easy to verify that the model is learning correctly 
 Comparing both implementations reinforced how modern ML frameworks abstract and optimise core mathematical operations.
 
 ---
+## User Interface (Blazor)
 
+- In addition to the console-based implementations, this project also includes a Blazor Server web interface that allows the linear regression model to be used interactively through a browser.
+
+- The Blazor UI:
+
+- Provides a simple input field for users to enter an X value
+
+- Calls the shared ModelTrainer logic from the Core library
+
+- Displays the predicted Y value in real time
+
+- Reuses the same trained model used by the console application
+
+- This demonstrates how the machine learning logic can be cleanly separated from the user interface and reused across different application types without duplication.
+
+- The UI serves as a practical demonstration of how a machine learning model can be exposed to end users in a real application.
 ##  How to Run
 
 ### Prerequisites
