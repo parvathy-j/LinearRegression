@@ -1,0 +1,33 @@
+@page "/regression"
+@using LinearRegression.Core
+@inject ModelTrainer Trainer
+
+<h3>Linear Regression Predictor</h3>
+
+<input type="number" @bind="x" />
+<button @onclick="DoPredict">Predict</button>
+
+<p>Predicted Y: @y</p>
+
+@code {
+    private float x;
+    private float y;
+
+    protected override void OnInitialized()
+    {
+        // train once (example data)
+        Trainer.Train(new[]
+        {
+            new ModelInput { X = 1, Y = 5 },
+            new ModelInput { X = 2, Y = 7 },
+            new ModelInput { X = 3, Y = 9 },
+            new ModelInput { X = 4, Y = 11 },
+            new ModelInput { X = 5, Y = 13 },
+        });
+    }
+
+    private void DoPredict()
+    {
+        y = Trainer.Predict(x);
+    }
+}
